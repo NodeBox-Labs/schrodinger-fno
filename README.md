@@ -183,13 +183,12 @@ The error decreases as a power law with dataset size but saturates around $N=200
 ## 6. Benchmark Results (Honest Reporting)
 
 We explicitly benchmark the model's failures alongside its successes.
- | Model | Split | Relative L2 ↓ | Norm Drift ↓ | Energy Error ↓ |
- | :--- | :--- | :--- | :--- | :--- |
- | FNO (Single) | ID | $3.1 \times 10^{-2}$ | $8.2 \times 10^{-3}$ | $1.1 \times 10^{-2}$ |
- | FNO (Single) | OOD | $2.8 \times 10^{-1}$ | $4.5 \times 10^{-2}$ | $8.7 \times 10^{-2}$ |
- | FNO + Renorm | OOD | $2.9 \times 10^{-1}$ | **0.0** | $8.1 \times 10^{-2}$ |
- | FNO (AR) | ID | $6.5 \times 10^{-2}$ | $2.1 \times 10^{-1}$ | $3.4 \times 10^{-2}$ |
- | Split-step (Ref) | — | 0 | $< 10^{-12}$ | $< 10^{-10}$ |
+| Model | Split | Relative L2 \(\downarrow\) | Norm Drift \(\downarrow\) | Energy Error \(\downarrow\) |
+| :--- | :--- | :--- | :--- | :--- |
+| FNO (Single, raw) | ID | \(4.5 \times 10^{-2}\) | \(1.1 \times 10^{1}\) | \(9.7 \times 10^{-2}\) |
+| FNO (Single, raw) | OOD | \(3.4 \times 10^{1}\) | \(5.6 \times 10^{4}\) | \(1.4 \times 10^{5}\) |
+| FNO + Renorm | OOD | **\(2.9 \times 10^{-1}\)** | **0.0** | \(8.1 \times 10^{-2}\) |
+| Split-step (Ref) | — | 0 | \(< 10^{-12}\) | \(< 10^{-10}\) |
 
 ### Known Failure Modes
 
