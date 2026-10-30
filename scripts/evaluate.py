@@ -12,8 +12,7 @@ from src.data.dataset import SchrodingerDataset
 from src.models.fno import FNO1d
 from src.eval.metrics import rel_l2, norm_drift, energy_error
 from src.eval.rollout import rollout_norm_drift
-from src.eval.plots import plot_norm_drift, plot_wavefunction
-
+from src.eval.plots import plot_norm_drift, plot_wavefunction, plot_worst_ood_failures
 
 def _load_model(ckpt_path, device):
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
@@ -23,7 +22,6 @@ def _load_model(ckpt_path, device):
     m.load_state_dict(ckpt["model"])
     m.eval()
     return m, cfg
-
 
 @torch.no_grad()
 def evaluate_split(model, cfg, data_path, device, renorm=False):
@@ -46,7 +44,6 @@ def evaluate_split(model, cfg, data_path, device, renorm=False):
     return (float(np.mean(all_rel)), float(np.mean(all_nd)),
             float(np.mean(all_ee)))
 
-
 def _time_forward(model, inp, device, n_warmup=5, n_iters=20):
     inp = inp.to(device)
     model.eval()
@@ -63,24 +60,33 @@ def _time_forward(model, inp, device, n_warmup=5, n_iters=20):
         dt = (time.perf_counter() - t0) / n_iters
     return dt  # seconds per batch
 
-
 def _time_solver(split_cfg, n_samples=16, device="cpu"):
     from src.data.solver import split_step_solver
     from src.data.initial_states import make_gaussian_packet
-    Nx = split_cfg["Nx"]; L = split_cfg["L"]
+    
+    # FIX: Load the full data config to get L, dt, psi0
+    with open("configs/data.yaml") as f:
+        full_cfg = yaml.safe_load(f)
+    
+    Nx = full_cfg["Nx"]
+    L = full_cfg["L"]
+    dt = full_cfg["dt"]
+    t_final = full_cfg["t_final"]
+    psi0_cfg = full_cfg["psi0"]
+    
     x = np.linspace(-L / 2, L / 2, Nx, endpoint=False)
     rng = np.random.default_rng(0)
     psi = torch.stack([
-        torch.from_numpy(make_gaussian_packet(x, rng, **split_cfg["psi0"])).double()
+        torch.from_numpy(make_gaussian_packet(x, rng, **psi0_cfg)).to(torch.complex128)
         for _ in range(n_samples)
     ])
     V = torch.zeros(n_samples, Nx, dtype=torch.float64)
     dx = x[1] - x[0]
-    n_steps = int(round(split_cfg["t_final"] / split_cfg["dt"]))
+    n_steps = int(round(t_final / dt))
+    
     t0 = time.perf_counter()
-    _ = split_step_solver(psi, V, dx, split_cfg["dt"], n_steps)
+    _ = split_step_solver(psi, V, dx, dt, n_steps)
     return (time.perf_counter() - t0) / n_samples  # per-sample
-
 
 def main(ckpt, data_dir, split, out_dir, renorm):
     os.makedirs(out_dir, exist_ok=True)
@@ -97,31 +103,31 @@ def main(ckpt, data_dir, split, out_dir, renorm):
 
     # timing
     ds = SchrodingerDataset(os.path.join(data_dir, "test_id.pt"))
-    inp_batch = torch.stack([ds[i][0] for i in range(64)])
-    t_fno = _time_forward(model, inp_batch, device) / 64.0  # per sample
+    inp_batch = torch.stack([ds[i][0] for i in range(min(64, len(ds)))])
+    t_fno = _time_forward(model, inp_batch, device) / inp_batch.shape[0]  # per sample
 
     # solver timing
     t_solver = _time_solver(cfg["data"], n_samples=16)
 
-    # norm drift over rollout
+    # --- PLOTTING SECTION ---
     T = 10
     drifts = rollout_norm_drift(model, inp_batch[:32], T=T, device=device)
-    plot_norm_drift({"raw": drifts},
-                    os.path.join(out_dir, f"norm_drift_{split}.png"))
+    plot_norm_drift({"raw": drifts}, os.path.join(out_dir, f"norm_drift_{split}.png"))
 
-    # sample wavefunction plot
     with torch.no_grad():
         inp, tgt = ds[0]
         pred = model(inp.unsqueeze(0).to(device)).cpu().squeeze(0)
-    x = np.linspace(-cfg["data"]["Nx"] / 2, cfg["data"]["Nx"] / 2,
-                    cfg["data"]["Nx"])  # placeholder
-    x = np.linspace(-10, 10, cfg["data"]["Nx"])
+    
+    x = np.linspace(-cfg["data"].get("L", 20.0) / 2, cfg["data"].get("L", 20.0) / 2, cfg["data"]["Nx"], endpoint=False)
     psi_p = (pred[0] + 1j * pred[1]).numpy()
     psi_t = (tgt[0] + 1j * tgt[1]).numpy()
-    plot_wavefunction(psi_p, psi_t, x,
-                      os.path.join(out_dir, f"sample_{split}.png"))
+    plot_wavefunction(psi_p, psi_t, x, os.path.join(out_dir, f"sample_{split}.png"))
 
-    # write CSV
+    if split == "test_ood":
+        ds_ood = SchrodingerDataset(os.path.join(data_dir, "test_ood.pt"))
+        plot_worst_ood_failures(model, ds_ood, x, device, os.path.join(out_dir, "worst_ood.png"))
+
+    # --- CSV SECTION ---
     csv_path = os.path.join(out_dir, f"metrics_{split}.csv")
     with open(csv_path, "w", newline="") as f:
         w = csv.writer(f)
@@ -134,7 +140,6 @@ def main(ckpt, data_dir, split, out_dir, renorm):
     for name, (r, nd, ee) in row.items():
         print(f"{name}:  relL2={r:.4e}  norm_drift={nd:.4e}  energy_err={ee:.4e}")
     print(f"FNO per-sample: {t_fno*1e3:.2f} ms | Solver per-sample: {t_solver*1e3:.2f} ms")
-
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()

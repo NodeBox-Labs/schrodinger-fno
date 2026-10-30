@@ -25,7 +25,7 @@ def energy_error(pred: torch.Tensor, target: torch.Tensor,
         psi = torch.complex(psi_channels[:, 0], psi_channels[:, 1])  # (B, N)
         N = psi.shape[-1]
         k = 2 * torch.pi * torch.fft.fftfreq(N, d=dx).to(psi.device).double()
-        psi_hat = torch.fft.fft(psi.double(), dim=-1)
+        psi_hat = torch.fft.fft(psi.to(torch.complex128), dim=-1)
         kinetic = 0.5 * (k ** 2) * psi_hat
         kin_psi = torch.fft.ifft(kinetic, dim=-1)
         # <E> = ∫ (½|∂ψ|² + V|ψ|²) dx  = ∫ ψ̄ (-½ ∂² + V) ψ dx
