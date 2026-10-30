@@ -52,19 +52,20 @@ def split_step_solver(psi0: torch.Tensor, V: torch.Tensor, dx: float,
         psi = torch.fft.ifft(torch.fft.fft(psi, dim=-1) * kh, dim=-1)
     return psi
 
-
 def free_gaussian_analytic(x: torch.Tensor, t: float,
                            x0: float, sigma: float, k0: float) -> torch.Tensor:
-    """Analytic free Gaussian wave packet (V=0).
+    """Analytic free Gaussian wave packet (V=0, ħ=m=1).
 
-    ψ(x,t) = (2πσ²)^{-1/4} (1 + i t/σ²)^{-1/2}
-             exp[-(x-x0)²/(4σ²(1+it/σ²)) + i k0 x - i k0² t/2]
+    ψ(x,t) = (2πσ²)^{-1/4} (1 + i t/(2σ²))^{-1/2}
+             exp[-(x - x0 - k0 t)²/(4σ²(1 + i t/(2σ²))) + i k0 x - i k0² t/2]
 
     with normalization ∫|ψ|² dx = 1.
     """
     x = x.double()
     norm = (2 * torch.pi * sigma ** 2) ** (-0.25)
-    denom = 1.0 + 1j * t / (sigma ** 2)
-    gauss = torch.exp(-((x - x0) ** 2) / (4.0 * sigma ** 2 * denom))
+    # FIX: the spread parameter uses t/(2σ²), not t/σ²
+    denom = torch.tensor(1.0 + 0.5j * t / (sigma ** 2), dtype=torch.complex128, device=x.device)
+    x_center = x0 + k0 * t
+    gauss = torch.exp(-((x - x_center) ** 2) / (4.0 * sigma ** 2 * denom))
     phase = torch.exp(1j * k0 * x - 0.5j * k0 ** 2 * t)
     return (norm / torch.sqrt(denom)) * gauss * phase

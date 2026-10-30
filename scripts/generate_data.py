@@ -48,7 +48,10 @@ def main(config_path: str, out_dir: str):
     os.makedirs(out_dir, exist_ok=True)
     seed = cfg["seed"]
 
-    # In-distribution    id_fams = cfg["id_families"]
+    # In-distribution family list
+    id_fams = cfg["id_families"]   # <-- ADD THIS LINE
+
+    # In-distribution splits
     train = _make_split(cfg, id_fams, cfg["n_train"], seed)
     val = _make_split(cfg, id_fams, cfg["n_val"], seed + 1)
     test_id = _make_split(cfg, id_fams, cfg["n_test_id"], seed + 2)
@@ -57,7 +60,7 @@ def main(config_path: str, out_dir: str):
     torch.save(val, os.path.join(out_dir, "val.pt"))
     torch.save(test_id, os.path.join(out_dir, "test_id.pt"))
 
-    # OOD
+    # OOD (already fine, uses ood_fams = cfg["ood_families"])
     ood_fams = cfg["ood_families"]
     test_ood = _make_split(cfg, ood_fams, cfg["n_test_ood"], seed + 3)
     torch.save(test_ood, os.path.join(out_dir, "test_ood.pt"))
