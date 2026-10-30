@@ -1,15 +1,4 @@
-"""
-Fourier Neural Operator (1D) with complex-valued features.
 
-I/O:
-    input  x: (B, 3, N) real  = [V, Re ψ0, Im ψ0]
-    output y: (B, 2, N) real  = [Re ψ_final, Im ψ_final]
-
-Internally we use complex tensors of shape (B, width, N) for the psi channel.
-The potential V and the wavefunction are fused into a complex feature of
-width `width` in the lifting layer, propagated through spectral + pointwise
-layers, then projected back to real ψ_final.
-"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

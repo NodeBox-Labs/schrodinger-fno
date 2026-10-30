@@ -9,15 +9,15 @@ model:
   out_channels: 2  # Re(psi_final), Im(psi_final)
 
 training:
-  mode: single           # "single" or "autoregressive"
+  mode: single
   batch_size: 32
   epochs: 200
   lr: 1.0e-3
   weight_decay: 1.0e-5
-  norm_penalty: 0.0      # set >0 for unitary-inspired penalty
-  ar_chunk: 4            # steps per forward during AR training
+  norm_penalty: 0.1        # <--- CHANGE THIS FROM 0.0 TO 0.1
+  ar_chunk: 4
   eval_every: 20
-  grad_clip: 1.0
+  grad_clip: 1.0           # <--- Make sure grad_clip is 1.0
 
 data:
   Nx: 256
