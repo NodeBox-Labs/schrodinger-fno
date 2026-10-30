@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: schrodinger-fno
+Version: 0.1.0
+Summary: Fourier Neural Operator as learned propagator for 1D Schrödinger equation
+Requires-Python: >=3.9
+Requires-Dist: torch>=2.0
+Requires-Dist: numpy>=1.23
+Requires-Dist: matplotlib>=3.6
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: pytest>=7.0
