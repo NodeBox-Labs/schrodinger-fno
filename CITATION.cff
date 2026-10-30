@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Zitouni"
+    given-names: "Nidhal"
+    # Add your ORCID here if you have one
+    orcid: "https://orcid.org/xxxx-xxxx-xxxx-xxxx"
+title: "Schrödinger-FNO: Operator Learning for Quantum Dynamics"
+version: 0.1.0
+date-released: "2025-01-01"
+url: "https://github.com/NodeBox-Labs/schrodinger-fno"
