@@ -51,7 +51,7 @@ $$
 \mathcal{L}_{\text{norm}} = \left( \int |\psi_{\text{pred}}(x)|^2 dx - 1 \right)^2
 $$
 
-The total loss is $\mathcal{L} = \mathcal{L}_{L2} + \lambda \mathcal{L}_{\text{norm}}$.
+The total loss is <b>𝓛 = 𝓛<sub>L2</sub> + λ · 𝓛<sub>norm</sub></b>.
 
 ---
 
