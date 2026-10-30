@@ -172,9 +172,9 @@ The FFT inherently assumes periodic boundaries. We explicitly enforce this by se
 
 ### 5.4 Scaling Laws
  | Training Size Scaling | Fourier Modes Scaling |
- | :---: | :---: |
- | ![N_train](results/scaling/scaling_ntrain.png) | ![Modes](results/scaling/scaling_modes.png) |
- | *Figure 4a: Error vs. Dataset Size.* | *Figure 4b: Error vs. Truncated Modes.* |
+| :---: | :---: |
+| ![N_train](results/scaling/scaling_ntrain.png) | ![Modes](results/scaling/scaling_modes.png) |
+| *Figure 4a: Error vs. Dataset Size.* | *Figure 4b: Error vs. Truncated Modes.* |
 
 The error decreases as a power law with dataset size but saturates around $N=2000$. Increasing the number of modes beyond 16 yields diminishing returns for smooth ID potentials but is critical for OOD potentials.
 
