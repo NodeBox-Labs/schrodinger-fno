@@ -171,7 +171,7 @@ The FFT inherently assumes periodic boundaries. We explicitly enforce this by se
 *Figure 3: The top 3 worst OOD failures. The green dotted line shows the highly oscillatory potential. The FNO fails to capture the high-frequency scattering, smoothing out the wavefunction.*
 
 ### 5.4 Scaling Laws
- | Training Size Scaling | Fourier Modes Scaling |
+| Training Size Scaling | Fourier Modes Scaling |
 | :---: | :---: |
 | ![N_train](results/scaling/scaling_ntrain.png) | ![Modes](results/scaling/scaling_modes.png) |
 | *Figure 4a: Error vs. Dataset Size.* | *Figure 4b: Error vs. Truncated Modes.* |
