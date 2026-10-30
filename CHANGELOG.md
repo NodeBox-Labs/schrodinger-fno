@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.0] - 2025-XX-XX
+## [0.1.0] - 
 ### Added
 - Initial release.
 - Strang split-step Fourier solver for the 1D Schrödinger equation.
