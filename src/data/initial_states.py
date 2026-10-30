@@ -11,8 +11,13 @@ def make_gaussian_packet(x: np.ndarray, rng: np.random.Generator,
     x0 = rng.uniform(-L / 2 + x0_margin, L / 2 - x0_margin)
     k0 = rng.uniform(-k0_max, k0_max)
     norm = (2 * np.pi * sigma ** 2) ** (-0.25)
+    
+    # Compute the complex wavefunction
     psi0 = norm * np.exp(-((x - x0) ** 2) / (4 * sigma ** 2)) * np.exp(1j * k0 * x)
-    # discrete renormalization to enforce unit L2 on grid
+    
+    # Discrete renormalization to enforce unit L2 on grid
     dx = x[1] - x[0]
     nrm = np.sqrt(np.sum(np.abs(psi0) ** 2) * dx)
+    
+    # FIX: Ensure the return type is explicitly complex128
     return (psi0 / nrm).astype(np.complex128)

@@ -26,7 +26,7 @@ def _make_split(cfg, families, n_samples, seed):
         psi0_np = make_gaussian_packet(x, rng, **cfg["psi0"])
 
         V_t = torch.from_numpy(V_np).double().unsqueeze(0)
-        psi0_t = torch.from_numpy(psi0_np).double().unsqueeze(0)
+        psi0_t = torch.from_numpy(psi0_np).to(torch.complex128).unsqueeze(0)
         n_steps = int(round(cfg["t_final"] / cfg["dt"]))
         psiF_t = split_step_solver(psi0_t, V_t, dx=dx, dt=cfg["dt"],
                                    n_steps=n_steps)
@@ -48,10 +48,10 @@ def main(config_path: str, out_dir: str):
     os.makedirs(out_dir, exist_ok=True)
     seed = cfg["seed"]
 
-    # In-distribution family list
-    id_fams = cfg["id_families"]   # <-- ADD THIS LINE
+    # FIX 1: Define id_fams
+    id_fams = cfg["id_families"]
 
-    # In-distribution splits
+    # In-distribution
     train = _make_split(cfg, id_fams, cfg["n_train"], seed)
     val = _make_split(cfg, id_fams, cfg["n_val"], seed + 1)
     test_id = _make_split(cfg, id_fams, cfg["n_test_id"], seed + 2)
@@ -60,7 +60,7 @@ def main(config_path: str, out_dir: str):
     torch.save(val, os.path.join(out_dir, "val.pt"))
     torch.save(test_id, os.path.join(out_dir, "test_id.pt"))
 
-    # OOD (already fine, uses ood_fams = cfg["ood_families"])
+    # OOD
     ood_fams = cfg["ood_families"]
     test_ood = _make_split(cfg, ood_fams, cfg["n_test_ood"], seed + 3)
     torch.save(test_ood, os.path.join(out_dir, "test_ood.pt"))
