@@ -1,0 +1,54 @@
+seed: 42
+Nx: 256
+L: 20.0
+t_final: 1.0
+dt: 0.005
+
+# Splits
+n_train: 2000
+n_val: 200
+n_test_id: 200
+n_test_ood: 200
+
+# Potential families (in-distribution)
+id_families: [grf_smooth, gaussian_wells, harmonic_perturb]
+
+# Out-of-distribution families
+ood_families: [grf_rough, double_well_large, periodic_lattice]
+
+# In-distribution params
+grf_smooth:
+  n_modes: 8
+  length_scale: 3.0
+  amplitude: 1.0
+gaussian_wells:
+  n_wells_min: 3
+  n_wells_max: 5
+  width_min: 0.5
+  width_max: 1.5
+  depth_min: -2.0
+  depth_max: 0.0
+harmonic_perturb:
+  omega: 0.5
+  perturb_amp: 0.2
+  perturb_modes: 4
+
+# OOD params (harsher)
+grf_rough:
+  n_modes: 32
+  length_scale: 1.0
+  amplitude: 2.0
+double_well_large:
+  barrier: 4.0
+  scale: 2.0
+periodic_lattice:
+  n_sites: 8
+  depth: 3.0
+  width: 0.4
+
+# Initial states
+psi0:
+  sigma_min: 0.5
+  sigma_max: 2.0
+  k0_max: 2.0
+  x0_margin: 4.0

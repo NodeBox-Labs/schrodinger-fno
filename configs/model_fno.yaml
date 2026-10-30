@@ -1,0 +1,24 @@
+seed: 42
+device: cuda
+
+model:
+  modes: 16
+  width: 64
+  n_layers: 4
+  in_channels: 3   # V + Re(psi0) + Im(psi0)
+  out_channels: 2  # Re(psi_final), Im(psi_final)
+
+training:
+  mode: single           # "single" or "autoregressive"
+  batch_size: 32
+  epochs: 200
+  lr: 1.0e-3
+  weight_decay: 1.0e-5
+  norm_penalty: 0.0      # set >0 for unitary-inspired penalty
+  ar_chunk: 4            # steps per forward during AR training
+  eval_every: 20
+  grad_clip: 1.0
+
+data:
+  Nx: 256
+  t_final: 1.0

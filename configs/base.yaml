@@ -1,0 +1,4 @@
+seed: 42
+device: cuda  # falls back to cpu if unavailable
+out_dir: results
+data_dir: data

@@ -1,0 +1,16 @@
+[project]
+name = "schrodinger-fno"
+version = "0.1.0"
+description = "Fourier Neural Operator as learned propagator for 1D Schrödinger equation"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0",
+    "numpy>=1.23",
+    "matplotlib>=3.6",
+    "pyyaml>=6.0",
+    "pytest>=7.0",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

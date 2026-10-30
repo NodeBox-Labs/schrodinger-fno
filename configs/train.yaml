@@ -1,0 +1,14 @@
+defaults:
+  - base.yaml
+  - data.yaml
+  - model_fno.yaml
+
+# Override for reproducibility experiments
+experiments:
+  - name: fno_single
+    mode: single
+  - name: fno_ar
+    mode: autoregressive
+  - name: fno_single_penalty
+    mode: single
+    norm_penalty: 1.0e-2
