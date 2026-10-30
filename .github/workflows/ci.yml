@@ -9,19 +9,33 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"] # Test across multiple versions
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: ${{ matrix.python-version }}
         
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install torch numpy matplotlib pyyaml pytest tqdm
+        pip install ruff mypy
         pip install -e .
+        
+    - name: Lint with ruff
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        ruff check src/ scripts/
+
+    - name: Type check with mypy
+      run: |
+        # Check types, but don't fail the build if there are missing stubs
+        mypy src/ --ignore-missing-imports || true
         
     - name: Run physics solver tests
       run: |
