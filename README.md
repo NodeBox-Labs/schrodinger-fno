@@ -51,7 +51,7 @@ $$
 \mathcal{L}_{\text{norm}} = \left( \int |\psi_{\text{pred}}(x)|^2 dx - 1 \right)^2
 $$
 
-The total loss is $\mathcal{L} = \mathcal{L}_{L2} + \lambda \mathcal{L}_{\text{norm}}$.
+The total loss is <b>𝓛 = 𝓛<sub>L2</sub> + λ · 𝓛<sub>norm</sub></b>.
 
 ---
 
@@ -183,12 +183,13 @@ The error decreases as a power law with dataset size but saturates around $N=200
 ## 6. Benchmark Results (Honest Reporting)
 
 We explicitly benchmark the model's failures alongside its successes.
-| Model | Split | Relative L2 \(\downarrow\) | Norm Drift \(\downarrow\) | Energy Error \(\downarrow\) |
+
+| Model | Split | Relative L2 ↓ | Norm Drift ↓ | Energy Error ↓ |
 | :--- | :--- | :--- | :--- | :--- |
-| FNO (Single, raw) | ID | \(4.5 \times 10^{-2}\) | \(1.1 \times 10^{1}\) | \(9.7 \times 10^{-2}\) |
-| FNO (Single, raw) | OOD | \(3.4 \times 10^{1}\) | \(5.6 \times 10^{4}\) | \(1.4 \times 10^{5}\) |
-| FNO + Renorm | OOD | **\(2.9 \times 10^{-1}\)** | **0.0** | \(8.1 \times 10^{-2}\) |
-| Split-step (Ref) | — | 0 | \(< 10^{-12}\) | \(< 10^{-10}\) |
+| FNO (Single, raw) | ID | `4.5e-2` | `1.1e+1` | `9.7e-2` |
+| FNO (Single, raw) | OOD | `3.4e+1` | `5.6e+4` | `1.4e+5` |
+| FNO + Renorm | OOD | **`2.9e-1`** | **`0.0`** | `8.1e-2` |
+| Split-step (Ref) | — | `0` | `< 1e-12` | `< 1e-10` |
 
 ### Known Failure Modes
 
