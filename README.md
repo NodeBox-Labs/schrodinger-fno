@@ -1,10 +1,10 @@
 # Schrödinger-FNO: Operator Learning for Quantum Dynamics
 
+[![CI](https://github.com/NodeBox-Labs/schrodinger-fno/actions/workflows/ci.yml/badge.svg)](https://github.com/NodeBox-Labs/schrodinger-fno/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
-
-A reproducible PyTorch implementation of a **Fourier Neural Operator (FNO)** used as a learned propagator for the 1D time-dependent Schrödinger equation. This repository serves as a rigorous benchmark, not just of accuracy, but of the model's ability to respect fundamental physical invariants (unitarity, energy conservation) and its generalization to out-of-distribution (OOD) potentials.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.PLACEHOLDER.svg)](https://doi.org/10.5281/zenodo.PLACEHOLDER)
 
 ---
 

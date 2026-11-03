@@ -9,3 +9,6 @@ title: "Schrödinger-FNO: Operator Learning for Quantum Dynamics"
 version: 0.1.0
 date-released: "2025-01-01"
 url: "https://github.com/NodeBox-Labs/schrodinger-fno"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.1234567"
