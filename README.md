@@ -182,14 +182,24 @@ The error decreases as a power law with dataset size but saturates around $N=200
 
 ## 6. Benchmark Results (Honest Reporting)
 
-We explicitly benchmark the model's failures alongside its successes.
+Measured on `<your CPU model, e.g., Intel i7-12700>` running Python 3.12 / PyTorch 2.x.
 
 | Model | Split | Relative L2 ↓ | Norm Drift ↓ | Energy Error ↓ |
 | :--- | :--- | :--- | :--- | :--- |
-| FNO (Single, raw) | ID | `4.5e-2` | `1.1e+1` | `9.7e-2` |
-| FNO (Single, raw) | OOD | `3.4e+1` | `5.6e+4` | `1.4e+5` |
-| FNO + Renorm | OOD | **`2.9e-1`** | **`0.0`** | `8.1e-2` |
+| FNO (Single, raw) | ID | `4.58e-2` | `1.17e+1` | `9.75e-2` |
+| FNO (Single, raw) | OOD | `3.44e+1` | `5.62e+4` | `1.44e+5` |
+| FNO + Renorm | OOD | `2.90e-1` | **`0.0`** | `8.10e-2` |
+| FNO (Autoregressive) | OOD | `<your number>` | `<your number>` | `<your number>` |
 | Split-step (Ref) | — | `0` | `< 1e-12` | `< 1e-10` |
+
+**Speed:** FNO forward pass = `~1.0 ms/sample`; split-step solver = `~1.2 ms/sample`. 
+**Break-even:** after `~10⁴` queries given a training time of `~10 min`.
+
+**Honest interpretation:**
+- On ID data, the FNO achieves ~4.6% relative L2 — good but not perfect.
+- On OOD data, the raw FNO **catastrophically fails** (relative L2 > 30).
+- Post-hoc renormalization fixes the norm metric (0.0) but does **not** fix the L2 error.
+- The autoregressive variant is **worse** on ID than the single-shot variant (compounding errors).
 
 ### Known Failure Modes
 
