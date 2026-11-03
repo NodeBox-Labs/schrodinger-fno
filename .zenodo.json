@@ -1,0 +1,20 @@
+{
+  "title": "Schrödinger-FNO: Operator Learning for Quantum Dynamics",
+  "description": "A reproducible PyTorch benchmark for Fourier Neural Operators as learned propagators of the 1D time-dependent Schrödinger equation.",
+  "creators": [
+    {
+      "name": "Zitouni, Nidhal"
+    }
+  ],
+  "keywords": [
+    "Fourier Neural Operator",
+    "Operator Learning",
+    "Schrödinger Equation",
+    "Quantum Mechanics",
+    "Scientific Machine Learning",
+    "PyTorch"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open"
+}
